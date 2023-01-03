@@ -13,9 +13,9 @@ function processM(event) {
   document.getElementById("ay").innerHTML = `Accélération en y : ${event.accelerationIncludingGravity.y}`;
   document.getElementById("az").innerHTML = `Accélération en z : ${event.accelerationIncludingGravity.z}`;
 
-  document.getElementById("ax").innerHTML = `Rotation en x : ${event.rotationRate.alpha}`;
-  document.getElementById("ay").innerHTML = `Rotation en y : ${event.rotationRate.beta}`;
-  document.getElementById("az").innerHTML = `Rotation en z : ${event.rotationRate.gamma}`;
+  document.getElementById("rx").innerHTML = `Rotation en x : ${event.rotationRate.alpha}`;
+  document.getElementById("ry").innerHTML = `Rotation en y : ${event.rotationRate.beta}`;
+  document.getElementById("rz").innerHTML = `Rotation en z : ${event.rotationRate.gamma}`;
 }
 
 function getOrientation() {
