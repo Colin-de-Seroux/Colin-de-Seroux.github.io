@@ -9,5 +9,7 @@ function process(event) {
 }
 
 function getOrientation() {
-  window.addEventListener("devicemotion", process, true);
+  if(window.DeviceOrientationEvent) {
+    window.addEventListener("devicemotion", process);
+  }
 }
