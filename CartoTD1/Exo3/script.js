@@ -12,18 +12,13 @@ function processO(event) {
 }
 
 function processM(event) {
-  document.getElementById("acceleration").innerHTML =
-    event.accelerationIncludingGravity;
+  document.getElementById("acceleration").innerHTML = event.accelerationIncludingGravity;
   document.getElementById("rotation").innerHTML = event.rotationRate;
 }
 
 function getOrientation() {
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener("deviceorientation", (event) => {
-      document.getElementById("alpha").innerHTML = event.alpha;
-      document.getElementById("beta").innerHTML = event.beta;
-      document.getElementById("gamma").innerHTML = event.gamma;
-    });
+  if(window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", processO);
   }
 
   if (window.DeviceMotionEvent) {
