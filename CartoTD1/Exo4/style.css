@@ -1,0 +1,14 @@
+#top {
+  margin-top: 60px;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvas {
+  box-shadow: 0 0 10px 0;
+}

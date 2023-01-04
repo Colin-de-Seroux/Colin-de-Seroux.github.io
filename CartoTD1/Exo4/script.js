@@ -1,29 +1,96 @@
-window.addEventListener("load", function () {
-  getOrientation();
+const info = document.getElementById("info");
+const button = document.getElementById("button");
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+let clicked = false;
+let color = "#000000";
+
+canvas.addEventListener("mousedown", clickStart);
+canvas.addEventListener("touchstart", clickStart);
+canvas.addEventListener("mousemove", move);
+canvas.addEventListener("touchmove", move);
+canvas.addEventListener("mouseup", clickEnd);
+canvas.addEventListener("touchend", clickEnd);
+button.addEventListener("click", clear);
+
+document.getElementById("blue").addEventListener("click", () => {
+  color = "#0000FF";
+});
+document.getElementById("grey").addEventListener("click", () => {
+  color = "#808080";
+});
+document.getElementById("green").addEventListener("click", () => {
+  color = "#008000";
+});
+document.getElementById("red").addEventListener("click", () => {
+  color = "#FF0000";
+});
+document.getElementById("yellow").addEventListener("click", () => {
+  color = "#FFFF00";
+});
+document.getElementById("white").addEventListener("click", () => {
+  color = "#FFFFFF";
+});
+document.getElementById("black").addEventListener("click", () => {
+  color = "#000000";
 });
 
-function processO(event) {
-  document.getElementById("alpha").innerHTML = event.alpha;
-  document.getElementById("beta").innerHTML = event.beta;
-  document.getElementById("gamma").innerHTML = event.gamma;
+function changeColor(color) {
+  this.color = color;
 }
 
-function processM(event) {
-  document.getElementById("ax").innerHTML = `Accélération en x : ${event.accelerationIncludingGravity.x}`;
-  document.getElementById("ay").innerHTML = `Accélération en y : ${event.accelerationIncludingGravity.y}`;
-  document.getElementById("az").innerHTML = `Accélération en z : ${event.accelerationIncludingGravity.z}`;
+function clickStart(event) {
+  event.preventDefault();
 
-  document.getElementById("rx").innerHTML = `Rotation en x : ${event.rotationRate.alpha}`;
-  document.getElementById("ry").innerHTML = `Rotation en y : ${event.rotationRate.beta}`;
-  document.getElementById("rz").innerHTML = `Rotation en z : ${event.rotationRate.gamma}`;
+  info.innerHTML = event.type;
+
+  context.beginPath();
+
+  const pos = getMousePos(event);
+
+  context.moveTo(pos.x, pos.y);
+  context.lineWidth = 3;
+  context.strokeStyle = color;
+  context.fill();
+
+  clicked = true;
 }
 
-function getOrientation() {
-  if(window.DeviceOrientationEvent) {
-    window.addEventListener("deviceorientation", processO);
+function move(event) {
+  event.preventDefault();
+
+  info.innerHTML = event.type;
+
+  if (clicked) {
+    const pos = getMousePos(event);
+
+    context.lineTo(pos.x, pos.y);
+    context.stroke();
+  }
+}
+
+function clickEnd(event) {
+  event.preventDefault();
+
+  info.innerHTML = event.type;
+
+  if (clicked) {
+    context.stroke();
   }
 
-  if (window.DeviceMotionEvent) {
-    window.addEventListener("devicemotion", processM);
-  }
+  clicked = false;
+}
+
+function clear(event) {
+  event.preventDefault();
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function getMousePos(event) {
+  const clientX = event.clientX || event.touches[0].clientX;
+  const clientY = event.clientY || event.touches[0].clientY;
+  const { offsetLeft, offsetTop } = event.target;
+
+  return { x: clientX - offsetLeft, y: clientY - offsetTop };
 }
