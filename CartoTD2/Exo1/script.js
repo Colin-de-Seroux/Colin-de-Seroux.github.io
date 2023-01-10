@@ -5,7 +5,7 @@ window.addEventListener("load", function () {
 function success(pos) {
   const crd = pos.coords;
 
-  const map = L.map("map");
+  let map = L.map("map").setView([crd.latitude, crd.longitude], 19);
 
   const greenIcon = new L.Icon({
     iconUrl:
@@ -28,8 +28,6 @@ function success(pos) {
     .bindPopup("Je suis ici")
     .openPopup();
 
-  map.setView([crd.latitude, crd.longitude], 13);
-
   L.marker([43.701711, 7.268157], { icon: greenIcon })
     .addTo(map)
     .bindPopup("Nice")
@@ -47,5 +45,5 @@ function getPosition() {
     maximumAge: 0,
   };
 
-  navigator.geolocation.watchPosition(success, error, options);
+  navigator.geolocation.getCurrentPosition(success, error, options);
 }
