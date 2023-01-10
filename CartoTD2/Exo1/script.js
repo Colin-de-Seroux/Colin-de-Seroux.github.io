@@ -5,7 +5,7 @@ window.addEventListener("load", function () {
 function success(pos) {
   const crd = pos.coords;
 
-  const map = L.map("map").setView([crd.latitude, crd.longitude], 13);
+  const map = L.map("map");
 
   const greenIcon = new L.Icon({
     iconUrl:
@@ -27,6 +27,8 @@ function success(pos) {
     .addTo(map)
     .bindPopup("Je suis ici")
     .openPopup();
+
+  map.setView([crd.latitude, crd.longitude], 13);
 
   L.marker([43.701711, 7.268157], { icon: greenIcon })
     .addTo(map)
