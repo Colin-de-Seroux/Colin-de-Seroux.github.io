@@ -34,16 +34,28 @@ function success(pos) {
       "&copy; 2023 Copyright : Colin de Seroux, LP DAM, phenix333.dev@gmail.com",
   }).addTo(map);
 
-  L.marker([crd.latitude, crd.longitude]).addTo(map).bindPopup("Je suis ici");
+  L.marker(
+    [crd.latitude, crd.longitude],
+    { icon: redIcon },
+    { color: "yellow" }
+  )
+    .addTo(map)
+    .bindPopup("Je suis ici");
 
   const nice = [43.701711, 7.268157];
   const marseille = [43.3, 5.4];
 
   L.marker(nice, { icon: greenIcon }).addTo(map).bindPopup("Nice");
 
-  L.marker(marseille, { icon: redIcon }).addTo(map).bindPopup("Marseille");
+  L.marker(marseille).addTo(map).bindPopup("Marseille");
 
-  L.polyline([nice, marseille], { color: "black" }).addTo(map).bindPopup("Distance : " + distance(nice[0], nice[1], marseille[0], marseille[1]) + "m");
+  L.polyline([nice, marseille], { color: "black" })
+    .addTo(map)
+    .bindPopup(
+      "Distance : " +
+        distance(nice[0], nice[1], marseille[0], marseille[1]) +
+        "m"
+    );
 
   L.polygon(
     [
@@ -57,7 +69,7 @@ function success(pos) {
     .bindPopup("Triangle des bermudes");
 
   L.circle([crd.latitude, crd.longitude], {
-    color: "green",
+    color: "orange",
     radius: crd.accuracy,
   }).addTo(map);
 }
@@ -94,5 +106,5 @@ function distance(x1, y1, x2, y2) {
     Math.sin(lat_d) * Math.sin(lat_d) +
     Math.cos(lat_a) * Math.cos(lat_b) * Math.sin(lon_d) * Math.sin(lon_d);
 
-  return (R * 2 * Math.atan2(Math.sqrt(d), Math.sqrt(1 - d)));
+  return R * 2 * Math.atan2(Math.sqrt(d), Math.sqrt(1 - d));
 }
