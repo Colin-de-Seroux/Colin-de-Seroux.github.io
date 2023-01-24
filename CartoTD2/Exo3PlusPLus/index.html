@@ -16,12 +16,25 @@
     />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
     <style>
+      html {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+
       #top {
         margin-top: 60px;
+        flex: 1;
       }
+
       #map {
         height: 700px;
       }
+
       .mapboxgl-popup {
         width: 100px;
       }

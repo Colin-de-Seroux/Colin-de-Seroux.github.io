@@ -21,11 +21,26 @@
       integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
       crossorigin=""
     ></script>
-    <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+    <script
+      type="text/javascript"
+      src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"
+    ></script>
     <style>
+      html {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+
       #top {
         margin-top: 60px;
+        flex: 1;
       }
+
       #map {
         height: 700px;
       }
