@@ -3,7 +3,6 @@ window.addEventListener("load", function () {
 });
 
 const setImageCanvas = () => {
-  console.log("par ici");
   let canvas = document.getElementById("canvas");
   let ctx = canvas.getContext("2d");
   let img = new Image();
@@ -23,19 +22,27 @@ const setImageCanvas = () => {
     ctx.fill();
 
     ctx.fillStyle = "orange";
-    ctx.fillRect(100, canvas.height - 200, 230, 200);
-    ctx.strokeRect(100, canvas.height - 200, 230, 200);
+    ctx.fillRect(100, canvas.height - 210, 230, 200);
+    ctx.strokeRect(100, canvas.height - 210, 230, 200);
 
     ctx.fillStyle = "brown";
-    ctx.fillRect(130, canvas.height - 180, 100, 180);
-    ctx.strokeRect(130, canvas.height - 180, 100, 180);
+    ctx.fillRect(130, canvas.height - 190, 100, 180);
+    ctx.strokeRect(130, canvas.height - 190, 100, 180);
 
     ctx.beginPath();
     ctx.fillStyle = "red";
-    ctx.moveTo(100, canvas.height - 200);
-    ctx.lineTo(215, canvas.height - 300);
-    ctx.lineTo(330, canvas.height - 200);
+    ctx.moveTo(100, canvas.height - 210);
+    ctx.lineTo(215, canvas.height - 310);
+    ctx.lineTo(330, canvas.height - 210);
     ctx.fill();
     ctx.stroke();
   };
 };
+
+const soleilClicked = () => {
+  let soleil = document.getElementById("soleil");
+  let ciel = document.getElementById("ciel");
+
+  soleil.style.fill = soleil.style.fill === "yellow" ? "orange" : "yellow";
+  ciel.style.fill = soleil.style.fill === "yellow" ? "blue" : "grey";
+}
