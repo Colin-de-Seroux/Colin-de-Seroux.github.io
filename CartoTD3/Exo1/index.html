@@ -1,10 +1,76 @@
 <!DOCTYPE html>
+<!-- Fait le 24/01/2023 par Colin de Seroux LP DAM département Nice Sophia Antipolis, phenix333.dev@gmail.com -->
 <html>
   <head>
-    <title>GeoCarto TD3 Exo1</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        min-width: 100%;
+      }
+
+      #top {
+        margin-top: 60px;
+        flex: 1;
+      }
+
+      canvas {
+        box-shadow: 0 0 10px 0;
+        width: 100%;
+      }
+
+      #footer {
+        width: 100%;
+      }
+    </style>
+    <title>GeoCarto TD3 Exo1</title>
   </head>
   <body>
-    <h1>Il n'y a rien à dire.</h1>
+    <nav
+      id="navigationBar"
+      class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top"
+    >
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="../../index.html">Accueil</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid" id="top">
+      <div id="container">
+        <canvas id="canvas"></canvas>
+        
+        <svg width="100" height="100">
+          <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+        </svg>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div
+        class="text-center p-4"
+        style="background-color: rgba(0, 0, 0, 0.05)"
+      >
+        © 2023 Copyright :
+        <a class="text-reset fw-bold" href="https://colin-de-seroux.github.io/"
+          >Colin de Seroux</a
+        >, LP DAM, phenix333.dev@gmail.com
+      </div>
+    </footer>
+
+    <script lang="js" src="./script.js"></script>
   </body>
 </html>
