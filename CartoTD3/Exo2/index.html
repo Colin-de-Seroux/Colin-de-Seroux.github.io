@@ -1,10 +1,132 @@
 <!DOCTYPE html>
+<!-- Fait le 24/01/2023 par Colin de Seroux LP DAM département Nice Sophia Antipolis, phenix333.dev@gmail.com -->
 <html>
   <head>
-    <title>GeoCarto TD3 Exo2</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        min-width: 100%;
+      }
+
+      #top {
+        margin-top: 60px;
+        flex: 1;
+      }
+
+      #canvas {
+        box-shadow: 0 0 10px 0;
+        width: 1000px;
+      }
+
+      #footer {
+        width: 100%;
+      }
+    </style>
+    <title>GeoCarto TD3 Exo2</title>
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
-    <h1>Il n'y a rien à dire.</h1>
+    <script type="module">
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        70,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      document.body.appendChild(renderer.domElement);
+
+      const black = "rgb(0, 0, 0)";
+      const white = "rgb(255, 255, 255)";
+      const red = "rgb(255, 0, 0)";
+      const green = "rgb(10, 200, 10)";
+      const grey = "rgb(192, 192, 192)";
+
+      renderer.setClearColor(black);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const axes = new THREE.AxesHelper(30);
+      scene.add(axes);
+
+      const planeGeometry = new THREE.PlaneGeometry(70, 30, 1, 1);
+      const planeMaterial = new THREE.MeshBasicMaterial({ color: grey });
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      plane.rotation.x = -0.5 * Math.PI;
+      scene.add(plane);
+
+      // const loader = new THREE.CubeTextureLoader();
+      // const textureCube = loader.load([
+      //   "../assets/prairie.jpg",
+      //   "../assets/prairie.jpg",
+      //   "../assets/prairie.jpg",
+      //   "../assets/prairie.jpg",
+      //   "../assets/prairie.jpg",
+      //   "../assets/prairie.jpg",
+      // ]);
+      const cubeGeometry = new THREE.BoxGeometry(6, 6, 6);
+      const cubeMaterial = new THREE.MeshPhongMaterial({
+        color: red,
+      });
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.position.x = -10;
+      cube.position.y = 3;
+      scene.add(cube);
+
+      const sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
+      const sphereMaterial = new THREE.MeshPhongMaterial({
+        color: red,
+      });
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      sphere.position.x = 10;
+      sphere.position.y = 4;
+      scene.add(sphere);
+
+      const light = new THREE.SpotLight(0xffffff);
+      light.position.set(-40, 60, 40);
+      scene.add(light);
+
+      camera.position.x = 50;
+      camera.position.y = 50;
+      camera.position.z = 50;
+      camera.lookAt(scene.position);
+
+      let render = function () {
+        // requestAnimationFrame(render);
+        // cube.rotation.x += 0.1;
+        // cube.rotation.y += 0.1;
+        renderer.render(scene, camera);
+      };
+
+      render();
+    </script>
   </body>
 </html>
