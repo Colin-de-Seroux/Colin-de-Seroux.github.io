@@ -184,6 +184,7 @@
 
         earth = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
+        earth.position.x = 40;
         scene.add(earth);
       }
 
@@ -206,6 +207,7 @@
 
           navette.scale.set(0.8, 0.8, 0.8);
           navette.rotation.y = 0.1;
+          navette.rotation.z = -1.7;
 
           scene.add(navette);
         });
