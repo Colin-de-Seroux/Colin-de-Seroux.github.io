@@ -175,7 +175,7 @@
       function createSphere() {
         const texture = new THREE.TextureLoader().load("../assets/earth.jpg");
         const sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
-        const sphereMaterial = new THREE.MeshBasicMaterial({
+        const sphereMaterial = new THREE.MeshLambertMaterial({
           map: texture,
         });
         sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
