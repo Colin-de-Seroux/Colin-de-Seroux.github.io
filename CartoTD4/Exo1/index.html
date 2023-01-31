@@ -78,14 +78,9 @@
     <script type="module">
       import * as THREE from "three";
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-      import { GUI } from "three/addons/libs/lil-gui.module.min.js";
       import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-      const black = "rgb(0, 0, 0)";
-      const white = "rgb(255, 255, 255)";
       const yellow = "rgb(255, 240, 188)";
-      const red = "rgb(255, 0, 0)";
-      const green = "rgb(10, 200, 10)";
       const grey = "rgb(192, 192, 192)";
 
       let scene;
@@ -110,7 +105,6 @@
         );
         camera.position.x = 1.5;
         camera.position.y = 1.5;
-        camera.position.z = 1.5;
         camera.lookAt(scene.position);
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -156,17 +150,16 @@
         });
         const earth = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
-        earth.rotateX(90 * (Math.PI / 180));
-
         scene.add(earth);
       }
 
       function latLonToCartesian(lat, lon) {
-        const latRad = lat * (Math.PI / 180);
-        const lonRad = lon * (Math.PI / 180);
-        const x = Math.cos(latRad) * Math.cos(lonRad);
-        const y = Math.cos(latRad) * Math.sin(lonRad);
-        const z = Math.sin(latRad);
+        // +1.2 pour le rapport à l'échelle du bonhomme
+        const latRad = (lat + 1.2) * (Math.PI / 180);
+        const lonRad = (lon - 180) * (Math.PI / 180);
+        const x = -Math.cos(latRad) * Math.cos(lonRad);
+        const y = Math.sin(latRad);
+        const z = Math.cos(latRad) * Math.sin(lonRad);
 
         return new THREE.Vector3(x, y, z);
       }
@@ -208,7 +201,7 @@
             new THREE.Vector3(0, 1, 0)
           );
           const angle = Math.acos(normal.dot(new THREE.Vector3(0, 0, 0)));
-          
+
           gentleman.quaternion.setFromAxisAngle(axis, -angle);
 
           scene.add(gentleman);
@@ -224,11 +217,10 @@
         const countryMaterial = new THREE.MeshLambertMaterial({
           map: countryFlag,
         });
-        const countryGeometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
+        const countryGeometry = new THREE.BoxGeometry(0.015, 0.015, 0.015);
         const countryMarker = new THREE.Mesh(countryGeometry, countryMaterial);
 
         countryMarker.position.copy(countryPos);
-        countryMarker.rotateX(90 * (Math.PI / 180));
 
         countryList.push(countryMarker);
 
@@ -257,13 +249,13 @@
         requestAnimationFrame(render);
 
         countryList.forEach((country) => {
-          country.rotation.y += 0.008;
+          country.rotation.y -= 0.008;
           country.rotation.x += 0.008;
-          country.rotation.z -= 0.008;
+          country.rotation.z += 0.008;
         });
 
         light.position.x = Math.sin(t * 0.1) * 20;
-        light.position.y = Math.cos(t * 0.1) * 20;
+        light.position.z = Math.cos(t * 0.1) * 20;
 
         t += (Math.PI / 180) * 2;
 
