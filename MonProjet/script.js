@@ -270,12 +270,8 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      // car.rotation.x = event.beta * (Math.PI / 180);
-      // car.rotation.y = -event.gamma * (Math.PI / 180);
-      car.rotation.z = event.alpha * (Math.PI / 180);
-      car.rotation.reorder("XYZ");
-      car.matrix.makeRotationFromEuler(car.rotation);
-      car.matrixAutoUpdate = false;
+      const rotationY = new THREE.Matrix4().makeRotationY(angle);
+      car.applyMatrix4(rotationY);
     });
   } else if (state === "goToSite") {
     getRoute(
@@ -349,7 +345,7 @@ function successWP(pos) {
   map.triggerRepaint();
 
   document.getElementById("speed").innerHTML = `Vitesse : ${
-    crd.speed === null ? 0 : crd.speed
+    crd.speed === null ? 0 : crd.speed.toFixed(2)
   } km/h`;
 }
 
