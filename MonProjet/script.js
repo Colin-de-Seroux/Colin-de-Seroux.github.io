@@ -270,7 +270,7 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      const rotationY = new THREE.Matrix4().makeRotationY(angle);
+      const rotationY = new THREE.Matrix4().makeRotationY(event.rotationRate.beta);
       car.applyMatrix4(rotationY);
     });
   } else if (state === "goToSite") {
