@@ -270,6 +270,7 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
+      console.log(event.beta);
       car.rotation.y = event.beta;
       map.triggerRepaint();
     });
