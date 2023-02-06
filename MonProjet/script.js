@@ -270,8 +270,8 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      const rotationY = new THREE.Matrix4().makeRotationY(event.beta);
-      car.applyMatrix4(rotationY);
+      car.rotation.y = event.beta;
+      map.triggerRepaint();
     });
   } else if (state === "goToSite") {
     getRoute(
