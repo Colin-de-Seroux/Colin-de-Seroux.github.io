@@ -270,9 +270,9 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      car.rotation.x = event.beta * (Math.PI / 180);
+      // car.rotation.x = event.beta * (Math.PI / 180);
       car.rotation.y = -event.gamma * (Math.PI / 180);
-      car.rotation.z = event.alpha * (Math.PI / 180);
+      // car.rotation.z = event.alpha * (Math.PI / 180);
       car.rotation.reorder("XYZ");
       car.matrix.makeRotationFromEuler(car.rotation);
       car.matrixAutoUpdate = false;
