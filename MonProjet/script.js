@@ -270,8 +270,8 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      console.log(event.beta);
-      car.rotation.y = event.beta;
+      console.log(event);
+      car.rotation.z = event.gamma * (Math.PI / 180);
       map.triggerRepaint();
     });
   } else if (state === "goToSite") {
