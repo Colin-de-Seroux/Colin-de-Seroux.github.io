@@ -15,7 +15,7 @@
       rel="stylesheet"
     />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <title>Projet</title>
   </head>
   <body>
@@ -32,10 +32,36 @@
 
     <div id="top" class="container-fluid">
       <div id="map"></div>
-      <button id="route" type="button" class="btn btn-primary" onclick="routeOk()">Valider le trajet</button>
-      <button id="parking" type="button" class="btn btn-success" onclick="parkingOk()">Je suis arrivé au parking</button>
-      <button id="info" type="button" class="btn btn-info" onclick="info()">Infos</button>
-      <button id="walk" type="button" class="btn btn-success" onclick="walkOk()">Je suis arrivé à detination</button>
+      <button
+        id="route"
+        type="button"
+        class="btn btn-primary"
+        onclick="routeOk()"
+      >
+        Valider le trajet
+      </button>
+      <button
+        id="parking"
+        type="button"
+        class="btn btn-success"
+        onclick="parkingOk()"
+      >
+        Je suis arrivé au parking
+      </button>
+      <button id="info" type="button" class="btn btn-info" onclick="info()">
+        Infos
+      </button>
+      <button
+        id="walk"
+        type="button"
+        class="btn btn-success"
+        onclick="walkOk()"
+      >
+        Je suis arrivé à destination
+      </button>
+      <div id="speed" class="text-nowrap">
+        Vitesse : 0 km/h
+      </div>
     </div>
 
     <footer>

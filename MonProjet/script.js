@@ -2,6 +2,7 @@ let state = "init";
 let map;
 let listSite = [];
 let goTo;
+let myPos;
 
 window.addEventListener("load", async function () {
   mapboxgl.accessToken =
@@ -49,6 +50,11 @@ async function success(pos) {
       center: [crd.longitude, crd.latitude],
       zoom: 13,
     });
+
+    myPos = new mapboxgl.Marker({ color: "#00ff00" })
+      .setLngLat([crd.longitude, crd.latitude])
+      .addTo(map)
+      .setPopup(new mapboxgl.Popup({ offset: 25 }).setText("Je suis ici"));
 
     getListClimbing().forEach((site) => {
       let popupSite = new mapboxgl.Popup({ offset: 25 }).setText(site.name);
@@ -180,28 +186,11 @@ function error(err) {
 }
 
 function successWP(pos) {
-  let crd = pos.coords;
+  const crd = pos.coords;
 
-  // console.log(`Longitude : ${crd.longitude}`);
-  // console.log(`Latitude : ${crd.latitude}`);
-  // console.log(`Altitude : ${crd.altitude}`);
-  // console.log(`Précision : ${crd.accuracy}`);
-  // console.log(`Vitesse : ${crd.speed}`);
+  myPos.setLngLat([crd.longitude, crd.latitude]);
 
-  const popupIci = new mapboxgl.Popup({ offset: 25 }).setText("Je suis ici");
-
-  let myMarker = new mapboxgl.Marker({ color: "#00ff00" })
-      .setLngLat([crd.longitude, crd.latitude])
-      .addTo(map)
-      .setPopup(popupIci);
-
-    myMarker.getElement().addEventListener("mouseenter", function () {
-      myMarker.togglePopup();
-    });
-
-    myMarker.getElement().addEventListener("mouseleave", function () {
-      myMarker.togglePopup();
-    });
+  document.getElementById("speed").innerHTML = `Vitesse : ${crd.speed === null ? 0 : crd.speed} km/h`;
 }
 
 function errorWP(err) {
@@ -252,7 +241,4 @@ function walkOk() {
   map.removeLayer("route");
 }
 
-
-function info() {
-  
-}
+function info() {}
