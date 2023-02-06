@@ -1,0 +1,48 @@
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+#top {
+  margin-top: 60px;
+  flex: 1;
+}
+
+#map {
+  width: 98.5%;
+  height: 84%;
+  position: absolute;
+}
+
+.mapboxgl-popup {
+  width: 100px;
+}
+
+.btn {
+  margin-top: 10px;
+  margin-left: 10px;
+  position: relative;
+  border: 1px solid black;
+}
+
+#route {
+  display: none;
+}
+
+#parking {
+  display: none;
+}
+
+#info {
+  display: none;
+  color: white;
+}
+
+#walk {
+  display: none;
+}

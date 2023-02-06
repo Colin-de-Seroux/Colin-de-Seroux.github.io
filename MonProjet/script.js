@@ -1,5 +1,7 @@
-let init = true;
+let state = "init";
 let map;
+let listSite = [];
+let goTo;
 
 window.addEventListener("load", async function () {
   mapboxgl.accessToken =
@@ -16,8 +18,8 @@ function getListClimbing() {
   return [
     {
       name: "Les Gorges du Blavet",
-      parking: { lat: 43.4329, lon: 6.7352 },
-      site: { lat: 43.5174132, lon: 6.6552713 },
+      parking: { lat: 43.516497, lon: 6.652439 },
+      site: { lat: 43.5174132, lon: 6.6525 },
       image: "./assets/les-gorges-du-blavet.jpg",
     },
     {
@@ -38,8 +40,8 @@ function getListClimbing() {
 async function success(pos) {
   const crd = pos.coords;
 
-  if (init) {
-    init = false;
+  if (state === "init") {
+    state = "";
 
     map = new mapboxgl.Map({
       container: "map",
@@ -79,42 +81,78 @@ async function success(pos) {
       });
 
       markerSite.getElement().addEventListener("click", function () {
-        getRoute([crd.longitude, crd.latitude], [site.parking.lon, site.parking.lat]);
+        getRoute(
+          [crd.longitude, crd.latitude],
+          [site.parking.lon, site.parking.lat],
+          "driving"
+        );
+        goTo = site;
+        document.getElementById("route").style.display = "block";
       });
+
+      listSite.push(markerSite);
     });
+
+    map.on("style.load", () => {
+      // Insert the layer beneath any symbol layer.
+      const layers = map.getStyle().layers;
+      const labelLayerId = layers.find(
+        (layer) => layer.type === "symbol" && layer.layout["text-field"]
+      ).id;
+
+      // The 'building' layer in the Mapbox Streets
+      // vector tileset contains building height data
+      // from OpenStreetMap.
+      map.addLayer(
+        {
+          id: "add-3d-buildings",
+          source: "composite",
+          "source-layer": "building",
+          filter: ["==", "extrude", "true"],
+          type: "fill-extrusion",
+          minzoom: 15,
+          paint: {
+            "fill-extrusion-color": "#aaa",
+
+            // Use an 'interpolate' expression to
+            // add a smooth transition effect to
+            // the buildings as the user zooms in.
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              15,
+              0,
+              15.05,
+              ["get", "height"],
+            ],
+            "fill-extrusion-base": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              15,
+              0,
+              15.05,
+              ["get", "min_height"],
+            ],
+            "fill-extrusion-opacity": 0.6,
+          },
+        },
+        labelLayerId
+      );
+    });
+  } else if (state === "goToSite") {
+    getRoute(
+      [crd.longitude, crd.latitude],
+      [goTo.site.lon, goTo.site.lat],
+      "walking"
+    );
   }
 }
 
-async function getRoute(start, end) {
-  map.on("load", () => {
-    map.addLayer({
-      id: "point",
-      type: "circle",
-      source: {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: start,
-              },
-            },
-          ],
-        },
-      },
-      paint: {
-        "circle-radius": 10,
-        "circle-color": "#3887be",
-      },
-    });
-  });
-
+async function getRoute(start, end, methode) {
   const query = await fetch(
-    `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA`,
+    `https://api.mapbox.com/directions/v5/mapbox/${methode}/${start[0]},${start[1]};${end[0]},${end[1]}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA`,
     { method: "GET" }
   );
   const json = await query.json();
@@ -164,4 +202,62 @@ function getPosition() {
   };
 
   navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+function routeOk() {
+  listSite.forEach((site) => {
+    if (
+      site._lngLat.lng !== goTo.site.lon &&
+      site._lngLat.lat !== goTo.site.lat
+    ) {
+      site.remove();
+    }
+  });
+
+  document.getElementById("route").style.display = "none";
+  document.getElementById("parking").style.display = "block";
+}
+
+function parkingOk() {
+  state = "goToSite";
+  getPosition();
+
+  document.getElementById("parking").style.display = "none";
+  document.getElementById("info").style.display = "block";
+  document.getElementById("walk").style.display = "block";
+}
+
+function walkOk() {
+  document.getElementById("walk").style.display = "none";
+
+  listSite.forEach((site) => {
+    site.remove();
+  });
+
+  map.removeLayer("route");
+}
+
+
+function successWP(pos) {
+  let crd = pos.coords;
+
+  console.log(`Longitude : ${crd.longitude}`);
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Altitude : ${crd.altitude}`);
+  console.log(`Précision : ${crd.accuracy}`);
+  console.log(`Vitesse : ${crd.speed}`);
+}
+
+function errorWP(err) {
+  console.warn(`ERREUR (${err.code}): ${err.message}`);
+}
+
+function info() {
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+  
+  navigator.geolocation.watchPosition(successWP, errorWP, options);
 }

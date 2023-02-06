@@ -15,30 +15,7 @@
       rel="stylesheet"
     />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
-    <style>
-      html {
-        height: 100%;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-      }
-
-      #top {
-        margin-top: 60px;
-        flex: 1;
-      }
-
-      #map {
-        height: 700px;
-      }
-
-      .mapboxgl-popup {
-        width: 100px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Projet</title>
   </head>
   <body>
@@ -55,6 +32,10 @@
 
     <div id="top" class="container-fluid">
       <div id="map"></div>
+      <button id="route" type="button" class="btn btn-primary" onclick="routeOk()">Valider le trajet</button>
+      <button id="parking" type="button" class="btn btn-success" onclick="parkingOk()">Je suis arrivé au parking</button>
+      <button id="info" type="button" class="btn btn-info" onclick="info()">Infos</button>
+      <button id="walk" type="button" class="btn btn-success" onclick="walkOk()">Je suis arrivé à detination</button>
     </div>
 
     <footer>
