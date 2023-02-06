@@ -50,21 +50,6 @@ async function success(pos) {
       zoom: 13,
     });
 
-    const popupIci = new mapboxgl.Popup({ offset: 25 }).setText("Je suis ici");
-
-    let myMarker = new mapboxgl.Marker({ color: "#00ff00" })
-      .setLngLat([crd.longitude, crd.latitude])
-      .addTo(map)
-      .setPopup(popupIci);
-
-    myMarker.getElement().addEventListener("mouseenter", function () {
-      myMarker.togglePopup();
-    });
-
-    myMarker.getElement().addEventListener("mouseleave", function () {
-      myMarker.togglePopup();
-    });
-
     getListClimbing().forEach((site) => {
       let popupSite = new mapboxgl.Popup({ offset: 25 }).setText(site.name);
       let markerSite = new mapboxgl.Marker({ color: "#0000ff" })
@@ -194,6 +179,35 @@ function error(err) {
   console.warn(`ERREUR (${err.code}): ${err.message}`);
 }
 
+function successWP(pos) {
+  let crd = pos.coords;
+
+  // console.log(`Longitude : ${crd.longitude}`);
+  // console.log(`Latitude : ${crd.latitude}`);
+  // console.log(`Altitude : ${crd.altitude}`);
+  // console.log(`Précision : ${crd.accuracy}`);
+  // console.log(`Vitesse : ${crd.speed}`);
+
+  const popupIci = new mapboxgl.Popup({ offset: 25 }).setText("Je suis ici");
+
+  let myMarker = new mapboxgl.Marker({ color: "#00ff00" })
+      .setLngLat([crd.longitude, crd.latitude])
+      .addTo(map)
+      .setPopup(popupIci);
+
+    myMarker.getElement().addEventListener("mouseenter", function () {
+      myMarker.togglePopup();
+    });
+
+    myMarker.getElement().addEventListener("mouseleave", function () {
+      myMarker.togglePopup();
+    });
+}
+
+function errorWP(err) {
+  console.warn(`ERREUR (${err.code}): ${err.message}`);
+}
+
 function getPosition() {
   const options = {
     enableHighAccuracy: true,
@@ -202,6 +216,7 @@ function getPosition() {
   };
 
   navigator.geolocation.getCurrentPosition(success, error, options);
+  navigator.geolocation.watchPosition(successWP, errorWP, options);
 }
 
 function routeOk() {
@@ -238,26 +253,6 @@ function walkOk() {
 }
 
 
-function successWP(pos) {
-  let crd = pos.coords;
-
-  console.log(`Longitude : ${crd.longitude}`);
-  console.log(`Latitude : ${crd.latitude}`);
-  console.log(`Altitude : ${crd.altitude}`);
-  console.log(`Précision : ${crd.accuracy}`);
-  console.log(`Vitesse : ${crd.speed}`);
-}
-
-function errorWP(err) {
-  console.warn(`ERREUR (${err.code}): ${err.message}`);
-}
-
 function info() {
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-  };
   
-  navigator.geolocation.watchPosition(successWP, errorWP, options);
 }
