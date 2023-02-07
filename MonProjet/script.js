@@ -83,19 +83,31 @@ function getListClimbing() {
       name: "Les Gorges du Blavet",
       parking: { lat: 43.516497, lon: 6.652439 },
       site: { lat: 43.5174132, lon: 6.6525 },
-      image: ["./assets/les-gorges-du-blavet.jpg", "./assets/les-gorges-du-blavet2.jpg", "./assets/les-gorges-du-blavet3.jpg"],
+      image: [
+        "./assets/les-gorges-du-blavet.jpg",
+        "./assets/les-gorges-du-blavet2.jpg",
+        "./assets/les-gorges-du-blavet3.jpg",
+      ],
     },
     {
       name: "Cap Dramont",
       parking: { lat: 43.4147, lon: 6.84837 },
       site: { lat: 43.413777, lon: 6.852078 },
-      image: ["./assets/cap-dramont.jpg", "./assets/cap-dramont2.jpg", "./assets/cap-dramont3.jpg"],
+      image: [
+        "./assets/cap-dramont.jpg",
+        "./assets/cap-dramont2.jpg",
+        "./assets/cap-dramont3.jpg",
+      ],
     },
     {
       name: "Rocher de Théole",
       parking: { lat: 43.448785, lon: 6.881681 },
       site: { lat: 43.44968, lon: 6.882336 },
-      image: ["./assets/rocher-de-theole.jpg", "./assets/rocher-de-theole2.jpg", "./assets/rocher-de-theole3.jpg"],
+      image: [
+        "./assets/rocher-de-theole.jpg",
+        "./assets/rocher-de-theole2.jpg",
+        "./assets/rocher-de-theole3.jpg",
+      ],
     },
   ];
 }
@@ -318,7 +330,7 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      car.rotation.y = (event.alpha * Math.PI) / 180;
+      car.rotation.y = ((event.alpha % 180) * Math.PI) / 180;
       map.triggerRepaint();
     });
   }
