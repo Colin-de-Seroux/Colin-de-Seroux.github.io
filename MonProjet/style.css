@@ -82,3 +82,13 @@ body {
   top: 0px;
   left: 43%;
 }
+
+@media (max-width: 575px) {
+  #top {
+    margin-top: 95px;
+  }
+  
+  #title {
+    right: 0px;
+  }
+}
