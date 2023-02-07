@@ -101,9 +101,10 @@ function getListClimbing() {
 }
 
 function createWheels() {
-  const geometry = new THREE.BoxBufferGeometry(3, 3, 8.25);
+  const geometry = new THREE.BoxBufferGeometry(8.25, 3, 3);
   const material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   const wheel = new THREE.Mesh(geometry, material);
+  wheel.position.y = 1.5;
   return wheel;
 }
 
@@ -111,28 +112,27 @@ function createCar() {
   car = new THREE.Group();
 
   const backWheel = createWheels();
-  backWheel.position.y = 1.5;
-  backWheel.position.x = -4.5;
+  backWheel.position.z = 4.5;
   car.add(backWheel);
 
   const frontWheel = createWheels();
-  frontWheel.position.y = 1.5;
-  frontWheel.position.x = 4.5;
+  frontWheel.position.z = -4.5;
   car.add(frontWheel);
 
   const main = new THREE.Mesh(
-    new THREE.BoxBufferGeometry(15, 3.25, 6.25),
+    new THREE.BoxBufferGeometry(6.25, 3.25, 15),
     new THREE.MeshLambertMaterial({ color: 0x78b14b })
   );
   main.position.y = 3;
   car.add(main);
 
   const cabin = new THREE.Mesh(
-    new THREE.BoxBufferGeometry(8.25, 3, 6),
+    new THREE.BoxBufferGeometry(6, 3, 8.25),
     new THREE.MeshLambertMaterial({ color: 0xffffff })
   );
-  cabin.position.x = -1.5;
+  cabin.position.z = 1.5;
   cabin.position.y = 6;
+
   car.add(cabin);
 
   return car;
@@ -318,7 +318,7 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      car.rotation.y = (-event.alpha * Math.PI) / 180;
+      car.rotation.y = (event.alpha * Math.PI) / 180;
       map.triggerRepaint();
     });
   }
