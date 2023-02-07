@@ -5,8 +5,9 @@ let goTo;
 let myPos;
 let modelTransform;
 let car;
-let compass
+let compass;
 let deviceControls;
+let crd;
 
 window.addEventListener("load", async function () {
   mapboxgl.accessToken =
@@ -52,14 +53,14 @@ function init() {
 function createCompass() {
   var loader = new THREE.STLLoader();
   loader.load("./assets/nsew.stl", function (geometry) {
-    var material = new THREE.MeshBasicMaterial({ color: 0x0114CD });
+    var material = new THREE.MeshBasicMaterial({ color: 0x0114cd });
     var mesh = new THREE.Mesh(geometry, material);
 
     mesh.scale.set(0.06, 0.06, 0.05);
     mesh.position.set(0, 0, 0);
 
     compass = new THREE.Object3D();
-    compass.rotation.y = 1.6
+    compass.rotation.y = 1.6;
     compass.add(mesh);
 
     scene.add(compass);
@@ -140,7 +141,7 @@ function createCar() {
 }
 
 function success(pos) {
-  const crd = pos.coords;
+  crd = pos.coords;
 
   if (state === "init") {
     state = "";
@@ -222,13 +223,6 @@ function success(pos) {
         directionalLight2.position.set(0, 70, 100).normalize();
         this.scene.add(directionalLight2);
 
-        // const loader = new THREE.GLTFLoader();
-        // loader.load(
-        //   "https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf",
-        //   (gltf) => {
-        //     this.scene.add(gltf.scene);
-        //   }
-        // );
         const car = createCar();
         this.scene.add(car);
 
@@ -328,16 +322,11 @@ function success(pos) {
       car.rotation.z = (-event.alpha * Math.PI) / 180;
       map.triggerRepaint();
     });
-  } else if (state === "goToSite") {
-    getRoute(
-      [crd.longitude, crd.latitude],
-      [goTo.site.lon, goTo.site.lat],
-      "walking"
-    );
   }
 }
 
 async function getRoute(start, end, methode) {
+  console.log(methode);
   const query = await fetch(
     `https://api.mapbox.com/directions/v5/mapbox/${methode}/${start[0]},${start[1]};${end[0]},${end[1]}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA`,
     { method: "GET" }
@@ -382,7 +371,7 @@ function error(err) {
 }
 
 function successWP(pos) {
-  const crd = pos.coords;
+  crd = pos.coords;
 
   myPos.setLngLat([crd.longitude, crd.latitude]);
 
@@ -428,8 +417,11 @@ function routeOk() {
 }
 
 function parkingOk() {
-  state = "goToSite";
-  getPosition();
+  getRoute(
+    [crd.longitude, crd.latitude],
+    [goTo.site.lon, goTo.site.lat],
+    "walking"
+  );
 
   document.getElementById("parking").style.display = "none";
   document.getElementById("info").style.display = "block";
@@ -446,5 +438,4 @@ function walkOk() {
   map.removeLayer("route");
 }
 
-function info() {
-}
+function info() {}
