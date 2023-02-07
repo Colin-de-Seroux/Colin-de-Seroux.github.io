@@ -73,8 +73,6 @@ function render() {
   renderer.render(scene, camera);
 }
 
-//////////////////////////////////////////
-
 function login() {
   // ok
 }
@@ -85,19 +83,19 @@ function getListClimbing() {
       name: "Les Gorges du Blavet",
       parking: { lat: 43.516497, lon: 6.652439 },
       site: { lat: 43.5174132, lon: 6.6525 },
-      image: "./assets/les-gorges-du-blavet.jpg",
+      image: ["./assets/les-gorges-du-blavet.jpg", "./assets/les-gorges-du-blavet2.jpg", "./assets/les-gorges-du-blavet3.jpg"],
     },
     {
       name: "Cap Dramont",
       parking: { lat: 43.4147, lon: 6.84837 },
       site: { lat: 43.413777, lon: 6.852078 },
-      image: "./assets/cap-dramont.jpg",
+      image: ["./assets/cap-dramont.jpg", "./assets/cap-dramont2.jpg", "./assets/cap-dramont3.jpg"],
     },
     {
       name: "Rocher de Théole",
       parking: { lat: 43.448785, lon: 6.881681 },
       site: { lat: 43.44968, lon: 6.882336 },
-      image: "./assets/cap-dramont.jpg",
+      image: ["./assets/rocher-de-theole.jpg", "./assets/rocher-de-theole2.jpg", "./assets/rocher-de-theole3.jpg"],
     },
   ];
 }
@@ -181,6 +179,7 @@ function success(pos) {
         );
         goTo = site;
         document.getElementById("route").style.display = "block";
+        info();
       });
 
       listSite.push(markerSite);
@@ -326,7 +325,6 @@ function success(pos) {
 }
 
 async function getRoute(start, end, methode) {
-  console.log(methode);
   const query = await fetch(
     `https://api.mapbox.com/directions/v5/mapbox/${methode}/${start[0]},${start[1]};${end[0]},${end[1]}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA`,
     { method: "GET" }
@@ -438,4 +436,14 @@ function walkOk() {
   map.removeLayer("route");
 }
 
-function info() {}
+function info() {
+  document.getElementById("firstImage").src = goTo.image[0];
+  document.getElementById("secondImage").src = goTo.image[1];
+  document.getElementById("firdImage").src = goTo.image[2];
+  document.getElementById("title").innerHTML = goTo.name;
+  document.getElementById("popup").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
