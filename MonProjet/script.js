@@ -5,13 +5,74 @@ let goTo;
 let myPos;
 let modelTransform;
 let car;
+let compass
+let deviceControls;
 
 window.addEventListener("load", async function () {
   mapboxgl.accessToken =
     "pk.eyJ1IjoiY3YwNiIsImEiOiJjajg2MmpzYjcwbWdnMzNsc2NzM2l4eW0yIn0.TfDJipR5II7orUZaC848YA";
 
   getPosition();
+  init();
+  render();
 });
+
+const yellow = "rgb(255, 240, 188)";
+const grey = "rgb(192, 192, 192)";
+
+let scene;
+let camera;
+let renderer;
+let light;
+let countryList = [];
+let t = 0;
+
+function init() {
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(grey);
+
+  camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.x = 1.5;
+  camera.position.y = 1.5;
+  camera.lookAt(scene.position);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(80, 80);
+
+  document.getElementById("container").appendChild(renderer.domElement);
+
+  createCompass();
+}
+
+function createCompass() {
+  var loader = new THREE.STLLoader();
+  loader.load("./assets/nsew.stl", function (geometry) {
+    var material = new THREE.MeshBasicMaterial({ color: 0x0114CD });
+    var mesh = new THREE.Mesh(geometry, material);
+
+    mesh.scale.set(0.06, 0.06, 0.05);
+    mesh.position.set(0, 0, 0);
+
+    compass = new THREE.Object3D();
+    compass.rotation.y = 1.6
+    compass.add(mesh);
+
+    scene.add(compass);
+  });
+}
+
+function render() {
+  requestAnimationFrame(render);
+
+  renderer.render(scene, camera);
+}
+
+//////////////////////////////////////////
 
 function login() {
   // ok
@@ -41,7 +102,7 @@ function getListClimbing() {
 }
 
 function createWheels() {
-  const geometry = new THREE.BoxBufferGeometry(12, 12, 33);
+  const geometry = new THREE.BoxBufferGeometry(3, 3, 8.25);
   const material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   const wheel = new THREE.Mesh(geometry, material);
   return wheel;
@@ -51,28 +112,28 @@ function createCar() {
   car = new THREE.Group();
 
   const backWheel = createWheels();
-  backWheel.position.y = 6;
-  backWheel.position.x = -18;
+  backWheel.position.y = 1.5;
+  backWheel.position.x = -4.5;
   car.add(backWheel);
 
   const frontWheel = createWheels();
-  frontWheel.position.y = 6;
-  frontWheel.position.x = 18;
+  frontWheel.position.y = 1.5;
+  frontWheel.position.x = 4.5;
   car.add(frontWheel);
 
   const main = new THREE.Mesh(
-    new THREE.BoxBufferGeometry(60, 15, 30),
+    new THREE.BoxBufferGeometry(15, 3.25, 6.25),
     new THREE.MeshLambertMaterial({ color: 0x78b14b })
   );
-  main.position.y = 12;
+  main.position.y = 3;
   car.add(main);
 
   const cabin = new THREE.Mesh(
-    new THREE.BoxBufferGeometry(33, 12, 24),
+    new THREE.BoxBufferGeometry(8.25, 3, 6),
     new THREE.MeshLambertMaterial({ color: 0xffffff })
   );
-  cabin.position.x = -6;
-  cabin.position.y = 25.5;
+  cabin.position.x = -1.5;
+  cabin.position.y = 6;
   car.add(cabin);
 
   return car;
@@ -91,16 +152,10 @@ function success(pos) {
       zoom: 13,
     });
 
-    ///////////////////////
-    ///////////////////////
-    ///////////////////////
     myPos = new mapboxgl.Marker({ color: "#00ff00" })
       .setLngLat([crd.longitude, crd.latitude])
       .addTo(map)
       .setPopup(new mapboxgl.Popup({ offset: 25 }).setText("Je suis ici"));
-    ///////////////////////
-    ///////////////////////
-    ///////////////////////
 
     getListClimbing().forEach((site) => {
       let popupSite = new mapboxgl.Popup({ offset: 25 }).setText(site.name);
@@ -270,8 +325,7 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      console.log(event);
-      car.rotation.z = -event.alpha * Math.PI / 180;
+      car.rotation.z = (-event.alpha * Math.PI) / 180;
       map.triggerRepaint();
     });
   } else if (state === "goToSite") {
@@ -330,13 +384,7 @@ function error(err) {
 function successWP(pos) {
   const crd = pos.coords;
 
-  ///////////////////////
-  ///////////////////////
-  ///////////////////////
   myPos.setLngLat([crd.longitude, crd.latitude]);
-  ///////////////////////
-  ///////////////////////
-  ///////////////////////
 
   const position = new mapboxgl.MercatorCoordinate(crd.longitude, crd.latitude);
 
@@ -398,4 +446,5 @@ function walkOk() {
   map.removeLayer("route");
 }
 
-function info() {}
+function info() {
+}
