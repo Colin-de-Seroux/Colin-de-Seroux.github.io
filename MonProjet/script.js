@@ -318,7 +318,7 @@ function success(pos) {
     });
 
     window.addEventListener("deviceorientation", function (event) {
-      // car.rotation.y = (event.alpha * Math.PI) / 180;
+      car.rotation.y = (event.beta * Math.PI) / 180;
       // map.triggerRepaint();
     });
   }
