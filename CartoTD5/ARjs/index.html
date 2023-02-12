@@ -1,39 +1,131 @@
 <!DOCTYPE html>
+<!-- Fait le 07/02/2023 par Colin de Seroux LP DAM département Nice Sophia Antipolis, phenix333.dev@gmail.com -->
 <html>
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <!-- we import arjs version without NFT but with marker + location based support -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <body style="margin: 0px; overflow: hidden">
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <!-- we use cors proxy to avoid cross-origin problems -->
-        <!--
-          ⚠️⚠️⚠️
-          https://arjs-cors-proxy.herokuapp.com/ is now offline, Heroku has dismissed all his free plans from November 2022.
-          You need to host your own proxy and use it instead. The proxy is based on CORS Anywhere (see https://github.com/Rob--W/cors-anywhere).
-          ⚠️⚠️⚠️
-        -->
-        <a-entity
-          id="myEntity"
-          position="0 0 0"
-          scale="0.05 0.05 0.05"
-          gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
-        ></a-entity>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
-    <script>
-      document.addEventListener(
-        "load",
-        () => {
-          navigator.geolocation.getCurrentPosition((position) => {
-            document.getElementById(
-              "myEntity"
-            ).position = `${position.coords.longitude} ${position.coords.latitude} ${position.coords.altitude}`;
-          });
-        },
-        false
-      );
-    </script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        min-width: 100%;
+      }
+
+      #top {
+        margin-top: 60px;
+        flex: 1;
+      }
+
+      #container {
+        box-shadow: 0 0 10px 0;
+      }
+
+      #footer {
+        width: 100%;
+      }
+    </style>
+    <title>GeoCarto TD5 AR.js</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body>
+    <nav
+      id="navigationBar"
+      class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top"
+    >
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="../../index.html">Accueil</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid" id="top">
+      <div id="container">
+        <a-scene embedded arjs>
+          <a-marker preset="hiro">
+            <a-plane
+              position="0 0 -4"
+              rotation="-90 0 0"
+              width="4"
+              height="4"
+              color="#7BC8A4"
+            ></a-plane>
+            <a-cylinder
+              position="1 0.75 -3"
+              radius="0.5"
+              height="1.5"
+              color="#FFC65D"
+            ></a-cylinder>
+            <a-cylinder
+              position="-1 0.75 -5"
+              radius="0.5"
+              height="1.5"
+              color="#FFC65D"
+            ></a-cylinder>
+            <a-box
+              position="0 2 -4"
+              width="4"
+              rotation="0 -45 0"
+              color="#4CC3D9"
+            ></a-box>
+            <a-sphere
+              position="0 0.75 -5"
+              radius="0.4"
+              color="#EF2D5E"
+            ></a-sphere>
+            <a-cylinder
+              position="0 1.2 -5"
+              radius="0.1"
+              height="0.5"
+              color="#AA6039"
+            ></a-cylinder>
+            <a-sky color="#ECECEC"></a-sky>
+
+            <!-- Hands. -->
+            <a-entity
+              id="teleHand"
+              hand-controls="left"
+              teleport-controls="type: parabolic; collisionEntities: [mixin='voxel'], #ground"
+            ></a-entity>
+            <a-entity
+              id="blockHand"
+              hand-controls="right"
+              controller-cursor
+              intersection-spawn="event: click; mixin: voxel"
+            ></a-entity>
+          </a-marker>
+
+          <!-- Camera. -->
+          <a-camera>
+            <a-cursor
+              intersection-spawn="event: click; mixin: voxel"
+            ></a-cursor>
+          </a-camera>
+        </a-scene>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div
+        class="text-center p-4"
+        style="background-color: rgba(0, 0, 0, 0.05)"
+      >
+        © 2023 Copyright :
+        <a class="text-reset fw-bold" href="https://colin-de-seroux.github.io/"
+          >Colin de Seroux</a
+        >, LP DAM, phenix333.dev@gmail.com
+      </div>
+    </footer>
   </body>
 </html>
